@@ -98,14 +98,24 @@ var products =  new Vue({
   el: '#products',
   store: store,
   methods: {
+    listFilteredSorted: function() {
+      return this.$store.getters.listFilteredSorted;
+    }
+  }
+})
+
+//  10.1. Component product
+Vue.component('product', {
+  props: ['obj'],
+  store: store,
+  template: '#template1',
+  methods: {
     setEditObj: function (obj) {
       this.$store.commit("setEditObj",obj);
+      $('.mini.modal').modal('show');
     },
     Delete: function (id) {
       this.$store.commit("Delete",id);
-    },
-    listFilteredSorted: function() {
-      return this.$store.getters.listFilteredSorted;
     }
   }
 })
@@ -134,13 +144,17 @@ var edit = new Vue({
   store: store,
   methods: {
     editOk: function(event) {
-      return this.$store.commit("editOk");
+      this.$store.commit("editOk");
+      return this.close();
     },
     getEditing: function() {
       return this.$store.state.editing;
     },
     keyUp: function(event) {
       return this.$store.commit("editingKeyUp",event.target.value);
+    },
+    close: function(event) {
+      return $('.mini.modal').modal('hide');
     }
   }
 })

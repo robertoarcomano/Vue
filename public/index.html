@@ -3,79 +3,89 @@
     <meta charset="UTF-8" />
     <title>Products in Vue</title>
 
-    <!-- 1. Include Bootstrap, jQuery, Vue, Babel -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <!-- 1. Include Vue, Babel, Vuex, jQuery, Semantic-UI -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://unpkg.com/vuex@2.0.0"></script>
-
-    <!-- 2. Script to select and focus on Modal Popup Modify Product -->
-    <script>
-      $(window).on('shown.bs.modal', function() {
-        var inputObj = $(".modal-body").find("input");
-        inputObj.select();
-        inputObj.focus();
-      });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="semantic/semantic.min.js"></script>
+    <link rel="stylesheet" href="semantic/semantic.min.css">
   </head>
   <body>
 
-    <!-- 3. Define DIV elements and contents -->
+    <!-- 2. Define DIV elements and contents -->
     <div style="width: 350px">
-
-      <!-- 3.1. header -->
+      <br>
+      <!-- 2.1. header -->
       <div id="header">
-        <h5 class="card-title">Products Count: {{getCount()}}</h5>
-        <button type="button" class="btn btn-success" v-on:click="load()">Load</button>&nbsp;
-        <button type="button" class="btn btn-warning" v-on:click="save()">Save</button>
-      </div><br>
+        <div class="ui compact menu">
+          <a class="item">
+            <i class="icon product hunt"></i> Products
+            <div class="floating ui red label">{{getCount()}}</div>
+          </a>
+        </div>
+        <br><br>
+        <button type="button" class="ui green button" v-on:click="load()">Load</button>&nbsp;
+        <button type="button" class="ui red button" v-on:click="save()">Save</button>
+      </div>
+      <br>
 
-      <!-- 3.2. products -->
-      <div id="products" style="height: 60%; overflow-y: scroll; width: '18rem'">
-        <div v-for="obj in listFilteredSorted()" class='card' style="width: '18rem'">
-          <div class='card-body'>
-            <h5 class='card-title'>{{obj.name}}</h5>
-            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#edit' v-on:click="setEditObj(obj)">
-              Edit
-            </button>&nbsp;
-            <a href='#' class='btn btn-danger' v-on:click="Delete(obj.id)">Delete</a>
+      <!-- 2.2. products -->
+      <div id="products" class="ui cards" style="height: 60%; overflow-y: scroll; width: '18rem'">
+        <product v-for="obj in listFilteredSorted()" v-bind:obj="obj" v-bind:key="obj.id"></product>
+      </div>
+      <!-- 2.2.1. product template -->
+      <template id="template1">
+        <div class='ui card'>
+          <div class='content'>
+            <div class='ui header'>{{obj.name}}</div>
+            <div class="description">
+              <button type='button' class='ui blue button' v-on:click="setEditObj(obj)">
+                Edit
+              </button>&nbsp;
+              <a href='#' class='ui grey button' v-on:click="Delete(obj.id)">Delete</a>
+            </div>
           </div>
         </div>
-      </div><br><br>
+      </template><br>
 
-      <!-- 3.3. Search & Create Product -->
-      <div id="new">
+      <!-- 2.3. Search & Create Product -->
+      <h4 class="ui header">
         Search & Create Product
-        <input type="text" id="searchAndCreateName" v-on:keyup="keyUp" ref="searchAndCreateName"/>&nbsp;
-        <button class="btn btn-info" v-on:click="add()" :disabled="getDisabled()">Add</button>
-      </div><br>
+      </h4>
+      <div class="ui input focus" id="new">
+        <input type="text" id="searchAndCreateName"placeholder="Search..." v-on:keyup="keyUp" ref="searchAndCreateName"/>&nbsp;
+        <button class="ui active violet button" v-on:click="add()" :disabled="getDisabled()"><i class="icon product hunt"></i>Add</button>
+      </div>
 
-      <!-- 3.4. Editing product -->
-      <div id="edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-         <div class="modal-content">
-           <div class="modal-header">
-             <h5 class="modal-title" id="exampleModalLongTitle">Edit Product {{getEditing().id}}</h5>
-             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-             </button>
-           </div>
-           <div class="modal-body">
-             <input type="text" :value="getEditing().name" v-on:keyup="keyUp"/>
-           </div>
-           <div class="modal-footer">
-             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button type="button" class="btn btn-primary" v-on:click="editOk">Edit</button>
-           </div>
-         </div>
+      <!-- 2.4. Editing product -->
+      <div id="edit" class='ui card mini modal' v-on:>
+        <div class='content'>
+          <div class='header'>Edit</div>
+          <div class="ui input focus description">
+            <input id="inputEdit" type="text" :value="getEditing().name" v-on:keyup="keyUp"/>
+          </div>
+        </div>
+        <div class='extra content'>
+          <button type="button" class="ui gray button" v-on:click="close">Close</button>
+          <button type='button' class='ui blue button' v-on:click="editOk">Edit</button>
         </div>
       </div>
-    </div>
 
-    <!-- 4. Include product.js -->
+    <!-- 3. Include product.js -->
     <script src="products.js"></script>
 
+    <!-- 4. Script to select and focus on Modal Popup Modify Product -->
+    <script>
+      $('#edit').modal('setting', {
+        autofocus: false,
+        onVisible: function () {
+          setTimeout(function () {
+            $('#inputEdit').focus();
+            $('#inputEdit').select();
+          }, 10);
+        }
+      });
+    </script>
   </body>
 </html>
