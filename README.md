@@ -8,7 +8,7 @@
 <img src=html2.png>
 
 ## Comments on index.html
-#### 1. Include Bootstrap, jQuery, Vue, Babel
+#### 1. Include Vue, Babel, Vuex, jQuery, Semantic-UI
 ```
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
