@@ -1,6 +1,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Products in Vue</title>
 
     <!-- 1. Include Vue, Babel, Vuex, jQuery, Semantic-UI -->
@@ -27,11 +28,10 @@
         <br><br>
         <button type="button" class="ui green button" v-on:click="load()">Load</button>&nbsp;
         <button type="button" class="ui red button" v-on:click="save()">Save</button>
-      </div>
-      <br>
+      </div><br>
 
       <!-- 2.2. products -->
-      <div id="products" class="ui cards" style="height: 60%; overflow-y: scroll; width: '18rem'">
+      <div id="products" class="ui cards" style="height: 55%; overflow-y: scroll; width: '18rem'">
         <product v-for="obj in listFilteredSorted()" v-bind:obj="obj" v-bind:key="obj.id"></product>
       </div>
       <!-- 2.2.1. product template -->
@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-      </template><br>
+      </template>
 
       <!-- 2.3. Search & Create Product -->
       <h4 class="ui header">
@@ -66,7 +66,7 @@
             <input id="inputEdit" type="text" :value="getEditing().name" v-on:keyup="keyUp"/>
           </div>
         </div>
-        <div class='extra content'>
+        <div class='actions'>
           <button type="button" class="ui gray button" v-on:click="close">Close</button>
           <button type='button' class='ui blue button' v-on:click="editOk">Edit</button>
         </div>
